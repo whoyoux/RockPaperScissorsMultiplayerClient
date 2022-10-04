@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import SocketContext from "../context/Socket/SocketContext";
 
 const Room = () => {
-  const { socket, roomId, isRoomOwner, roomStatus } =
+  const { socket, roomId, isRoomOwner, currentRoom } =
     useContext(SocketContext).SocketState;
 
   const [roomStatusText, setRoomStatusText] = useState("");
@@ -12,7 +12,7 @@ const Room = () => {
   };
 
   useEffect(() => {
-    switch (roomStatus) {
+    switch (currentRoom.status) {
       case "created":
         setRoomStatusText("Created and waiting for second player");
         break;
@@ -29,7 +29,7 @@ const Room = () => {
         setRoomStatusText("Room status.");
         break;
     }
-  }, [roomStatus]);
+  }, [currentRoom]);
 
   return (
     <div className="text-zinc-300">
@@ -40,7 +40,9 @@ const Room = () => {
       </div>
       <div className="flex flex-col gap-5 mt-10">
         <h1
-          className={`text-3xl ${roomStatus === "ready" && "text-green-500"}`}
+          className={`text-3xl ${
+            currentRoom.status === "ready" && "text-green-500"
+          }`}
         >
           {roomStatusText}
         </h1>
@@ -50,19 +52,27 @@ const Room = () => {
             <div className="flex-1 bg-zinc-600 rounded-md p-5">
               <div className="flex flex-col">
                 <span className="text-sm">Owner</span>
-                <h1>nickname</h1>
+                <h1>
+                  {currentRoom.firstPlayerUsername
+                    ? currentRoom.firstPlayerUsername
+                    : "????"}
+                </h1>
               </div>
             </div>
             <div className="flex-1 bg-zinc-600 rounded-md p-5">
               <div className="flex flex-col">
                 <span className="text-sm">Client</span>
-                <h1>Waiting</h1>
+                <h1>
+                  {currentRoom.secondPlayerUsername
+                    ? currentRoom.secondPlayerUsername
+                    : "Waiting..."}
+                </h1>
               </div>
             </div>
           </div>
         </div>
 
-        {roomStatus === "ready" && isRoomOwner && (
+        {currentRoom.status === "ready" && isRoomOwner && (
           <button className="button bg-green-500 hover:bg-green-600">
             Start!
           </button>

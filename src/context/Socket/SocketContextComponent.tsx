@@ -67,12 +67,24 @@ const SocketContextComponent: FC<ISocketContextComponentProps> = (props) => {
     });
 
     // Created room event
-    socket.on("created_room", (roomId: string) => {
-      console.info(`User created and joined to a room with id: ${roomId}`);
-      SocketDispatch({ type: "update_roomId", payload: roomId });
-      SocketDispatch({ type: "set_room_owner", payload: true });
-      SocketDispatch({ type: "change_room_status", payload: "created" });
-    });
+    socket.on(
+      "created_room",
+      ({
+        roomId,
+        ownerUsername,
+      }: {
+        roomId: string;
+        ownerUsername: string;
+      }) => {
+        console.info(`User created and joined to a room with id: ${roomId}`);
+        SocketDispatch({ type: "update_roomId", payload: roomId });
+        SocketDispatch({ type: "set_room_owner", payload: true });
+        SocketDispatch({
+          type: "change_room_status",
+          payload: { status: "created", firstPlayerUsername: ownerUsername },
+        });
+      }
+    );
 
     // Joined room event
     socket.on("joined_room", (roomId: string) => {

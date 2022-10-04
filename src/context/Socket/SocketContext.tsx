@@ -9,6 +9,12 @@ export type TRoomStatus =
   | "canceled"
   | "notInRoom";
 
+export type TChangeRoomStatus = {
+  status: TRoomStatus;
+  firstPlayerUsername?: string;
+  secondPlayerUsername?: string;
+};
+
 export interface ISocketContextState {
   username: string;
   socket: Socket | undefined;
@@ -16,7 +22,7 @@ export interface ISocketContextState {
   users: string[];
   roomId: string;
   isRoomOwner: boolean;
-  roomStatus: TRoomStatus;
+  currentRoom: TChangeRoomStatus;
 }
 
 export const defaultSocketContextState: ISocketContextState = {
@@ -26,7 +32,7 @@ export const defaultSocketContextState: ISocketContextState = {
   users: [],
   roomId: "",
   isRoomOwner: false,
-  roomStatus: "notInRoom",
+  currentRoom: { status: "notInRoom" },
 };
 
 export type TSocketContextActions =
@@ -44,7 +50,7 @@ export type TSocketContextPayload =
   | string[]
   | Socket
   | boolean
-  | TRoomStatus;
+  | TChangeRoomStatus;
 
 export interface ISocketContextActions {
   type: TSocketContextActions;
@@ -86,7 +92,7 @@ export const SocketReducer = (
     case "change_room_status":
       return {
         ...state,
-        roomStatus: action.payload as TRoomStatus,
+        currentRoom: action.payload as TChangeRoomStatus,
       };
     default:
       return { ...state };

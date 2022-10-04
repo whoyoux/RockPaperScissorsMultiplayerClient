@@ -3,7 +3,7 @@ import Room from "./components/Room";
 import SocketContext from "./context/Socket/SocketContext";
 
 function App() {
-  const { socket, uid, users, roomId, isRoomOwner, roomStatus } =
+  const { socket, uid, users, roomId, isRoomOwner, currentRoom } =
     useContext(SocketContext).SocketState;
 
   const roomIdRef = useRef<HTMLInputElement>(null);
@@ -53,7 +53,7 @@ function App() {
         <p>Socket id: {socket?.id}</p>
         <p>Actual room info: {roomId}</p>
         <p>isOwnerOfRoom: {isRoomOwner ? "true" : "false"}</p>
-        <p>Room status: {roomStatus}</p>
+        <p>Room status: {currentRoom.status}</p>
       </div>
     </>
   );
