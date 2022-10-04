@@ -96,10 +96,12 @@ const SocketContextComponent: FC<ISocketContextComponentProps> = (props) => {
     // User kicked out from a room
     socket.on("kick", (message?: string) => {
       console.info("User leaved from a room.");
-      message && alert(message);
+
       SocketDispatch({ type: "update_roomId", payload: "" });
       SocketDispatch({ type: "set_room_owner", payload: false });
       SocketDispatch({ type: "change_room_status", payload: "notInRoom" });
+
+      message && alert(message);
     });
 
     // Ready to start event
@@ -109,6 +111,11 @@ const SocketContextComponent: FC<ISocketContextComponentProps> = (props) => {
         type: "change_room_status",
         payload: roomStatus as TRoomStatus,
       });
+    });
+
+    // Starting the game!!!
+    socket.on("starting", (roomId: string) => {
+      console.info("Starting the game!");
     });
 
     // User disconnected event
@@ -143,7 +150,8 @@ const SocketContextComponent: FC<ISocketContextComponentProps> = (props) => {
     });
   };
 
-  const SendHandshake = () => {
+  const SendHandshake = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     console.info("Sending handshake");
 
     const username = getAndCheckUsername();
@@ -185,7 +193,15 @@ const SocketContextComponent: FC<ISocketContextComponentProps> = (props) => {
   if (loading)
     return (
       <div className="flex flex-col max-w-md mx-auto justify-center mt-[10vh] text-2xl">
-        <div className="w-full pb-10 mb-10 flex flex-col gap-5">
+        <div className="w-full flex flex-col items-center justify-center py-10">
+          <h1 className="text-6xl mb-10">👊 ✋ 🖖</h1>
+          <span className="text-3xl">Rock Paper Scissors Multiplayer</span>
+          <span className="text-sm">by whoyoux</span>
+        </div>
+        <form
+          className="w-full pb-10 mb-10 flex flex-col gap-5"
+          onSubmit={SendHandshake}
+        >
           <input
             type="text"
             placeholder="Your username"
@@ -193,10 +209,8 @@ const SocketContextComponent: FC<ISocketContextComponentProps> = (props) => {
             maxLength={10}
             ref={usernameRef}
           />
-          <button className="button" onClick={SendHandshake}>
-            Set and check your username
-          </button>
-        </div>
+          <input type="submit" className="button" value="Set your username" />
+        </form>
       </div>
     );
 

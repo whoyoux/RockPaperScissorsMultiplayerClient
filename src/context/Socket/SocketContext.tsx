@@ -61,9 +61,8 @@ export const SocketReducer = (
   state: ISocketContextState,
   action: ISocketContextActions
 ) => {
-  console.log(
-    `Message Received - Action ${action.type} with payload ${action.payload}`
-  );
+  console.log(`Message Received - Action ${action.type} with payload: `);
+  console.log(action?.payload);
 
   switch (action.type) {
     case "set_username":

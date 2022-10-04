@@ -11,6 +11,10 @@ const Room = () => {
     socket?.emit("leave_room", roomId);
   };
 
+  const startGame = () => {
+    socket?.emit("start_game", roomId);
+  };
+
   useEffect(() => {
     switch (currentRoom.status) {
       case "created":
@@ -24,6 +28,9 @@ const Room = () => {
         break;
       case "canceled":
         setRoomStatusText("Cancelled");
+        break;
+      case "playing":
+        setRoomStatusText("Playing!");
         break;
       default:
         setRoomStatusText("Room status.");
@@ -51,7 +58,7 @@ const Room = () => {
           <div className="flex flex-row gap-5">
             <div className="flex-1 bg-zinc-600 rounded-md p-5">
               <div className="flex flex-col">
-                <span className="text-sm">Owner</span>
+                <span className="text-sm">Owner:</span>
                 <h1>
                   {currentRoom.firstPlayerUsername
                     ? currentRoom.firstPlayerUsername
@@ -61,7 +68,7 @@ const Room = () => {
             </div>
             <div className="flex-1 bg-zinc-600 rounded-md p-5">
               <div className="flex flex-col">
-                <span className="text-sm">Client</span>
+                <span className="text-sm">Client:</span>
                 <h1>
                   {currentRoom.secondPlayerUsername
                     ? currentRoom.secondPlayerUsername
@@ -73,7 +80,10 @@ const Room = () => {
         </div>
 
         {currentRoom.status === "ready" && isRoomOwner && (
-          <button className="button bg-green-500 hover:bg-green-600">
+          <button
+            className="button bg-green-500 hover:bg-green-600"
+            onClick={startGame}
+          >
             Start!
           </button>
         )}
