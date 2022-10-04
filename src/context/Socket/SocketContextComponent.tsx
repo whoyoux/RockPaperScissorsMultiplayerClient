@@ -14,7 +14,8 @@ import {
   TRoomStatus,
 } from "./SocketContext";
 
-const SERVER_URL = "ws://localhost:3000";
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+console.log(SERVER_URL);
 
 export interface ISocketContextComponentProps extends PropsWithChildren {}
 
