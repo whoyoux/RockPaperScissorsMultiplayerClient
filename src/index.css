@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .button {
+    @apply p-4 bg-zinc-600 rounded-md hover:bg-zinc-700 transition-all;
+  }
+
+  .small__button {
+    @apply px-3 py-2 text-xl bg-zinc-600 rounded-md hover:bg-zinc-700 transition-all;
+  }
+}
